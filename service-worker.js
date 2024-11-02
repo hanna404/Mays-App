@@ -1,11 +1,11 @@
 // service-worker.js
 const CACHE_NAME = 'may-cache-v1';
 const urlsToCache = [
-    '/pwa/index.html',
-    '/pwa/app.js?t=4',
-    '/pwa/style.css',
-    '/pwa/navbar.html',
-    '/pwa/fallback.html' // Add a fallback page
+    '/Mays-App/index.html',
+    '/Mays-App/app.js?t=4',
+    '/Mays-App/style.css',
+    '/Mays-App/navbar.html',
+    '/Mays-App/fallback.html' // Add a fallback page
 ];
 
 // Install Service Worker and cache necessary files
