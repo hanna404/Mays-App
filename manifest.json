@@ -1,7 +1,7 @@
 {
-  "name": "Egg Sale",
-  "short_name": "شميس",
-  "start_url": "https://hanna404.github.io/pwa/index.html",
+  "name": "May's Farm",
+  "short_name": "May's Farm",
+  "start_url": "https://hanna404.github.io/Mays-App/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
