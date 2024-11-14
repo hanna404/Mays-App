@@ -2,6 +2,8 @@
 
 var id="";
 var user="";
+var permission= "";
+
 // check data
 
 fetch('navbar.html')
