@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+ 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="https://raw.githubusercontent.com/hanna404/Mays-App/refs/heads/main/manifest.json">
+<link rel="stylesheet" href="style.css" />
+ 
+<style>
+  .body {
+    background:#e5ffe5;
+  }
+ 
+  </style>
+  </head>
+  <body dir="rtl" class="body">
+    
+ 
+ 
+    <div class="container" style="margin-top: 80px;">
+        <h1 class="header" style="font-size: 75px;" id="h1Val"> عرض خاص </h1>
+      <br><br>
+
+      <!-- Your current form and content goes here -->
+
+    </div>
+
+
+
+    <script>
+  
+      //get locations
+ 
+ 
+if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            console.log("Latitude: " + position.coords.latitude);
+            console.log("Longitude: " + position.coords.longitude);
+        },
+        error => {
+            console.error("Geolocation permission denied or error: " + error.message);
+        }
+    );
+} else {
+    console.error("Geolocation is not supported by this browser.");
+}
+
+// handling div buttons
+
+   
+    </script>
+   
+    <form id="inForm" onsubmit="event.preventDefault(); geoFindMe(this);">
+    <input type=hidden  name="method" value="addBuyEgg"/>
+
+    <div class="inputItem newCustomer">
+      <label style="width:auto" >ملء معلومات العميل </label>
+      <br><br>
+      <label>المنطقة  </label>
+      <input type=text  name="newLocation" id="newLocation"/>
+    <br><br>
+    <label>اسم العميل</label>
+  <input type=text  name="customerName" id="customerName"/>
+   <br>
+    <br>
+      <label>رقم التليفون</label>
+     
+  <input type="tel"  name="customerPhone"  id="customerPhone"/>
+  <br> <br>
+
+            <table dir="rtl">
+              <tr> 
+             <th> <label >غرض </label> </th>
+             <th> <label style="display: none;" >سعر الصندوق </label> </th>
+             <th>  <label style="width: 60px;">	كمية </label></th>
+               
+                </tr>
+                <tr>
+                  <td><select id="itemSelect"   style="width: 170px; margin-left: 20px;"><option value="أحمر وسط " >أحمر وسط </option> </select> </td>
+                  <td>  <input type="number"  id="visiblePrice" value="" placeholder="" style="width:80px ; margin-left: 70px; display: none;" /><input type="hidden"  id="averageCost" value="" placeholder="" /></td>
+                  <td> <input type="number" id="itemQuantityRed" name="itemQuantityRed" value="" placeholder="" style="width:80px" />
+                               </td>
+               
+
+                  </tr>
+              </table>
+                        
+                         
+                               
+                               </div>
+                               <br><br>
+    
+      </div>
+ 
+
+
+      
+      <br><br>
+    <button class="save"  style="width: 500px;">   اطلب الأن    </label> </button>
+      
+     <input type="hidden"  name="alt" />
+     <input type="hidden"  name="long"/>
+      </form>
+    
+  </body>
+  <script>
+
+    
+
+
+    function onSuccess() {
+   //   let number=a2e ($("#customerPhone").val());
+    //  let convNumber = Number(number);
+      let wNumber="+96170271517";
+      let invoiceText=`عدد صندوق ` + $("#itemQuantityRed").val();
+      let text = `طلبية :       
+---------------------------
+`;
+text+=invoiceText;
+ 
+
+     
+    // alert (encodeURIComponent(text));
+  //  alert(invoiceText);
+
+   swal({
+title: 'نجح',
+text: ' تمت العملية بنجاح، شكرا لك'+' \n',
+  icon: "success",
+      closeOnClickOutside: false,
+      closeOnEsc: false,
+  buttons: {
+   cancel: "أغلقه",
+  confirm: " أرسل رسالة",
+   
+  },
+})
+.then((willSendWhatsap) => {
+  if (willSendWhatsap) {
+    window.open('https://wa.me/'+wNumber+'?text='+encodeURIComponent(text), '_blank');
+  swal(' مرسل', {
+      icon: "success",
+      closeOnClickOutside: false,
+      closeOnEsc: false
+    }).then(function(){ 
+   reLoad();
+   });
+  } else {
+  swal(' شكرًا لك').then(function(){ 
+ reLoad();
+   });
+  }
+});
+      }
+
+     
+
+
+   function geoFindMe(form) {
+$(".save").prop('disabled', true);
+       geolocation = new Promise((resolve, reject) => {
+navigator.geolocation.watchPosition(
+    position => { resolve(position.coords) },
+    error => { reject(error) }
+  )
+}).catch(error => error)
+      
+ 
+      
+
+        if(!navigator.geolocation) {
+        } else {
+         new Promise(function(resolve,reject){
+
+resolve(geolocation);
+
+}).then(function(coords){
+    console.log("koukou in then 4");
+    form.alt.value=coords.latitude;
+    form.long.value=coords.longitude;
+}).then(function(){ 
+    console.log("koukou in then 5");
+  let objToSave = {
+    method:'onlaynehaha',
+    e:"id",
+    arrayOfItems:"invoiceObject",
+    alt:form.alt.value,
+    longi:form.long.value,
+    name:form.customerName.value,
+    phone:form.customerPhone.value,
+    location:form.newLocation.value,    
+   bankDollar:form.itemQuantityRed.value,
+bankLira:"red",
+   totalHiddenBankAccount:0,
+
+ jsTs:Date.now().toString()
+
+  }
+
+console.log("koukou in then 7");
+      
+        sendRequest(objToSave);
+       console.log( 'Data sent successfully!');
+   
+
+     onSuccess();
+  
+// fetch the data to google api 
+
+//run the onSuccess handler in the resolve promise
+
+// handle the save later google.script.run.withSuccessHandler(onSuccess).saveToGoogleSheet(objToSave)
+});
+
+        }
+      }
+
+function reLoad() {
+  // handle reload
+  window.location.reload();
+}
+
+function sendRequest(data) {
+    fetch('https://script.google.com/macros/s/AKfycbxzsJ2WKCEjMmCBRHa9xghgk4KlW0cG9QYQbwigZ09vleaA2grRGV9qoQP7eScrG5XI3Q/exec', {
+        mode: 'no-cors',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log('Data sent successfully:', result);
+    })
+    .catch(error => {
+        console.log('Error sending data:', error);
+        // Save request in IndexedDB if it fails
+       // saveRequest(data);
+    });
+}
+</script>
+
+
+</html>
