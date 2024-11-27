@@ -99,6 +99,7 @@
         if (a['status']== "success"){
         localStorage.setItem('user', a['username']);
         localStorage.setItem('e', a['e']);
+        localStorage.setItem('permission', a['permission'].replace(/\n/g, '').replace(/\r/g, '').replace(/\s/g, '').trim());
         window.location='index.html';}
         else {
         window.location='login.html';
@@ -108,3 +109,4 @@
 
 </body>
 </html>
+

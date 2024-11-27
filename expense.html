@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   
+<script src="app.js?t=3" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="https://raw.githubusercontent.com/hanna404/Mays-App/refs/heads/main/manifest.json">
+<link rel="stylesheet" href="style.css" />
+ 
+<style>
+  .body {
+    background:#e5ffe5;
+  }
+ 
+  </style>
+  </head>
+  <body dir="rtl" class="body">
+    
+   <div class="loading">
+    <div class="loader"></div>
+</div>
+ 
+ <div id="navbar"></div>
+    <div class="container" style="margin-top: 80px;">
+        <h1 class="header" id="h1Val">المصاريف</h1>
+      <br><br>
+
+      <!-- Your current form and content goes here -->
+
+    </div>
+
+
+
+    <script>
+  
+   
+
+
+
+if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            console.log("Latitude: " + position.coords.latitude);
+            console.log("Longitude: " + position.coords.longitude);
+        },
+        error => {
+            console.error("Geolocation permission denied or error: " + error.message);
+        }
+    );
+} else {
+    console.error("Geolocation is not supported by this browser.");
+}
+
+
+
+
+  $(document).ready(function(){
+  $(".navbar-toggle").click(function() {
+          $("#navbar-collapse").collapse('toggle');
+        });
+       
+  $(".loading").hide();
+   checkData();
+   // Scroll the page to the far right
+   $(window).scrollLeft($(document).width());
+
+  
+
+
+
+
+});
+
+
+
+  
+  //translate arabic numbers to english
+   const a2e = s => s.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+
+ 
+let invoiceObject = [];
+let invoiceText = ``;
+  function updateTotalInvoice () {
+    invoiceObject = [];
+    invoiceText = ``;
+    let table = document.getElementById("invoice");
+    
+    var totalPrice=0;
+    
+for (var i = 1, row; row = table.rows[i]; i++) {
+  let rowItem = {
+  type:row.cells[0].getElementsByTagName("label")[0].innerHTML.replace(/&nbsp;/g, ' '),
+    totalPrice:row.cells[1].getElementsByTagName("label")[0].innerHTML
+  }
+  
+console.log("row.cells[ erHTML");
+  invoiceObject.push(rowItem);
+ totalPrice+=rowItem.totalPrice*1.00;
+ invoiceText+=rowItem.type+" عدد صندوق : "+rowItem.quantity+"  سعر : "+ rowItem.totalPrice +"$";
+ invoiceText+=`
+ `;
+
+}
+console.log(totalPrice);
+$("#totalSumInvoiceSpan").html(totalPrice);
+$("#totalSumInvoice").val(totalPrice);
+$("#totalSumInvoiceCollected").val(totalPrice);
+
+$("#totalSumInvoiceLiraSpan").html(totalPrice*90000);
+// add a hidden field to savew the value of the total invoice
+$("#totalSumInvoiceServer").val(totalPrice);
+
+  }
+  function removeItem (a) {
+   
+   $(a).closest('tr').remove(); 
+   
+    updateTotalInvoice();      
+}
+
+  function addItem(){
+    let itemName=$('#itemSelect').find(":selected").text();
+    let itemBoxPrice=$('#visiblePrice').val();
+    let itemPkg = $('#boxQ').find(":selected").val();
+    let quantityInBox= $('#itemQuantity').val();
+    let averageCost = $('#averageCost').val(); 
+  
+
+  // convertt what needs conversion for arabic JS numbers
+  
+    itemBoxPrice=a2e(itemBoxPrice);
+    quantityInBox=a2e(quantityInBox);
+
+ /// end of conversion 
+
+ // convert strings to numbers
+
+    itemBoxPrice=Number(itemBoxPrice);
+    averageCost=Number(averageCost);
+    quantityInBox=Number(quantityInBox);
+
+ // end convert string to numbers
+let totalItemPrice =  quantityInBox*itemBoxPrice;
+
+    if(itemPkg=="carton") {
+      totalItemPrice= (totalItemPrice/12).toPrecision(3);
+      quantityInBox= (quantityInBox/12).toPrecision(3);
+    //    totalItemPrice=Math.round((totalItemPrice + Number.EPSILON) * 100) / 100;
+   // quantityInBox=Math.round((quantityInBox + Number.EPSILON) * 100) / 100;
+    }
+
+let totalItemAverageCost =  quantityInBox*averageCost;
+  
+
+    let template = `      <tr class="itemInTable">
+                  <td><label style="  width: auto;" >${itemName}</label ></td>
+                
+                  <td><label style="  width: auto;">${totalItemPrice}</label ></td>
+                  <td> <label style=" display:none">${averageCost}</label>  <div class="removebtn" onclick="removeItem($(this))">x</div> </td>
+
+                  </tr>` ;
+                //  alert(template);
+
+      $('#invoice tr:last').after(template);    
+      clearItemSelect();
+      updateTotalInvoice();      
+
+  }
+  function clearItemSelect(){
+    $('#itemSelect').prop('selectedIndex',0);
+    $('#visiblePrice').val('');
+    $('#boxQ').prop('selectedIndex',0);
+    
+    $("#averageCost").val('');
+    $('#itemQuantity').val('');
+  }
+
+  function selectTypeHandler(a) {
+    let price= a.find(":selected").attr('price');
+    let averageCost= a.find(":selected").attr('avrgcost');
+    $("#visiblePrice").val(price);
+    $("#averageCost").val(averageCost);
+    // $("#visiblePrice").attr("placeholder", price);
+  }
+
+
+    </script>
+   
+    <form id="inForm" onsubmit="event.preventDefault(); geoFindMe(this);">
+    <input type=hidden  name="method" value="addBuyEgg"/>
+      
+      
+     <div style="width: 180px;"><h1>إضافة عنصر </h1></div> 
+          <div class="inputItem" >
+
+            <table dir="rtl">
+              <tr> 
+             <th> <label >النوع </label> </th>
+             <th> <label  style="display: none;" >سعر الصندوق </label> </th>
+             <th>  <label style="width: 60px;">	$ </label></th>
+               <th>   <select id="boxQ" style="width: 130px; display: none;">
+                          <option value="box" >  صندوق  </option> 
+                          <option value="carton" >  كرتون  </option> 
+                            
+                            </select>
+                            </th>
+                </tr>
+                <tr>
+                  <td><select id="itemSelect" onchange="selectTypeHandler($(this))" style="width: 170px; margin-left: 20px;">                 
+                    <option  value="" > </option>                    
+                    <option price="1" avrgcost="1" value="بنزين" >بنزين </option>                                 
+                    <option price="1" avrgcost="1" value="مازوت" >مازوت</option>            
+                    <option price="1" avrgcost="1" value="تصليح" >تصليح </option>           
+                    <option price="1" avrgcost="1" value="اجارات" >اجارات </option>          
+                    <option price="1" avrgcost="1" value="بضاعة" >بضاعة </option>           
+                    <option price="1" avrgcost="1" value="مختلف" >مختلف  </option>           
+                    <option price="1" avrgcost="1" value="دين إستثنائي" >دين إستثنائي </option>  
+                    <option price="1" avrgcost="1" value="بدل عن ضائع " >بدل عن ضائع   </option>                
+
+                  </select> </td>
+                  <td>  <input type="number"  id="visiblePrice" value="" placeholder="" style="width:80px ; margin-left: 70px; display: none;" /><input type="hidden"  id="averageCost" value="" placeholder="" /></td>
+                  <td> <input type="number" id="itemQuantity" value="" placeholder="" style="width:180px" />
+                               </td>
+                  <td> <div class="addbtn" onclick="addItem()">+</div> </td>
+
+                  </tr>
+              </table>
+                        
+                         
+                               
+                               </div>
+                               <br><br>
+                               <div class="inputItem oldCustomer">
+                                <label>ملاحظة</label>
+                                <input style="width: 520px;" id="customerSelect" name="customerSelect" >  
+                               </select>
+                              
+                               </div> 
+    
+      </div>
+      <div style="width: 500px; ">
+    <div style="width: 100px;"><h1>الجردة  </h1></div> 
+      </div>
+      <div id="invoiceTable" class="inputItem">
+                   <table id="invoice" dir="rtl">
+              <tr> 
+             <th> <label >غرض</label> </th>
+              
+             <th>  <label style="  width: auto;"> الإجمالي</label> </th>
+                 <th style="  width: auto;">  <label>. </label> </th>
+                </tr>
+
+              </table>
+     </div>
+
+
+      <br>  <br>
+      <div class="inputItem" style="width:auto">
+                       <label style="width:auto" >المجموع <span id="totalSumInvoiceSpan"> </span> $ </label>
+ 
+     <br><br>
+                         <label style="width:auto">أو 
+                           <span id="totalSumInvoiceLiraSpan"> </span> L.L. </label>
+     <input type="number"  id="totalSumInvoiceLira"  name="totalSumInvoiceLira" placeholder="القبض" />
+   
+     <input type="hidden"  id="totalSumInvoiceServer" name="totalSumInvoiceServer"/>
+   <input type="hidden"  id="vanNumber" name="vanNumber" value=van1 />
+    </div>
+    <br>  <br>
+
+      
+      <br><br>
+    <button class="save" >   يحفظ   </label> </button>
+      
+     <input type="hidden"  name="alt" />
+     <input type="hidden"  name="long"/>
+      </form>
+    
+  </body>
+  <script>
+
+    
+
+
+    function onSuccess() {
+      //let number=a2e ($("#customerPhone").val());
+     // let convNumber = Number(number);
+     // let wNumber="+961"+convNumber;
+      let text = `فاتورة رسمية : 
+---------------------------
+`;
+text+=invoiceText;
+text+= `
+---------------------------
+
+المجموع :    ${$("#totalSumInvoiceSpan").html()} $
+     
+---------------------------
+     `;
+
+     
+    // alert (encodeURIComponent(text));
+  //  alert(invoiceText);
+
+   swal({
+title: 'نجح',
+text: ' تمت العملية بنجاح، شكرا لك'+' \n'+invoiceText,
+  icon: "success",
+      closeOnClickOutside: false,
+      closeOnEsc: false,
+  buttons: {
+    cancel: "أغلقه",
+  confirm: " أرسل رسالة",
+   
+  },
+})
+/*.then((willSendWhatsap) => {
+  if (willSendWhatsap) {
+    window.open('https://wa.me/'+wNumber+'?text='+encodeURIComponent(text), '_blank');
+  swal(' مرسل', {
+      icon: "success",
+      closeOnClickOutside: false,
+      closeOnEsc: false
+    }).then(function(){ 
+   reLoad();
+   });
+  } else {
+  swal(' شكرًا لك').then(function(){ 
+ reLoad();
+   });
+  }
+})*/
+.then(function(){ 
+   reLoad();
+   });;
+      }
+
+     
+
+
+   function geoFindMe(form) {
+$(".save").prop('disabled', true);
+       geolocation = new Promise((resolve, reject) => {
+navigator.geolocation.watchPosition(
+    position => { resolve(position.coords) },
+    error => { reject(error) }
+  )
+}).catch(error => error)
+      
+ 
+      
+
+        if(!navigator.geolocation) {
+        } else {
+         new Promise(function(resolve,reject){
+
+resolve(geolocation);
+
+}).then(function(coords){
+    console.log("koukou in then 4");
+    form.alt.value=coords.latitude;
+    form.long.value=coords.longitude;
+}).then(function(){ 
+    console.log("koukou in then 5");
+  let objToSave = {
+    method:'addExpense',
+    e:id,
+    arrayOfItems:invoiceObject,
+    alt:form.alt.value,
+    longi:form.long.value,
+    name:"Expense",
+    phone:"",
+    location:form.customerSelect.value,
+ bankDollar:"", //a2e(form.totalSumInvoice.value),
+bankLira:"",//a2e(form.totalSumInvoiceLira.value),
+   totalHiddenBankAccount:form.totalSumInvoiceServer.value,
+ vanNumber:user,
+ oldCustomer:"",
+ jsTs:Date.now().toString()
+
+  }
+
+
+       if (navigator.onLine) {
+        sendRequest(objToSave);
+       console.log( 'Data sent successfully!');
+    } else {
+        // Save the request in IndexedDB if offline
+        saveRequest(objToSave);
+          console.log('Offline. Data will be sent when online.');
+    }
+
+     onSuccess();
+  
+// fetch the data to google api 
+
+//run the onSuccess handler in the resolve promise
+
+// handle the save later google.script.run.withSuccessHandler(onSuccess).saveToGoogleSheet(objToSave)
+});
+
+        }
+      }
+
+function reLoad() {
+  // handle reload
+  window.location.reload();
+}
+
+</script>
+
+
+</html>

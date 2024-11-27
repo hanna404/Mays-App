@@ -20,8 +20,8 @@
     <div class="loading">
      <div class="loader"></div>
  </div>
- 
- <div id="navbar"></div>
+ <div id="fakeBox"> <div id="navbar"></div></div>
+
     <div class="container" style="margin-top: 80px;">
       <h1 class="header" id="h1Val">فاتورة البيع الرسمية</h1>
       <br><br>
@@ -336,7 +336,7 @@ let rowItem = {
 console.log("row.cells[ erHTML");
 invoiceObject.push(rowItem);
 totalPrice+=rowItem.totalPrice*1.00;
-invoiceText+=rowItem.type+" عدد صندوق : "+rowItem.quantity+"  سعر : "+ rowItem.totalPrice +"$";
+invoiceText+=rowItem.type+" عدد صندوق : "+rowItem.quantity+"  مجموع السعر  : "+ rowItem.totalPrice +"$";
 invoiceText+=`
 `;
 
@@ -477,14 +477,30 @@ $("#totalSumInvoiceServer").val(totalPrice);
     let number=a2e ($("#customerPhone").val());
     let convNumber = Number(number);
     let wNumber="+961"+convNumber;
-    let text = `فاتورة رسمية : 
+    let text = `شكراً لتعاونكم مع مزارع مي - الكورة، لملاحظتكم +96171281323 
+    
+    ---------------------------
+    ---------------------------
+
+     ` ;
+  text += `فاتورة بيع رسمية : 
+
 ---------------------------
 `;
 text+=invoiceText;
 text+= `
+
 ---------------------------
 
 المجموع :    ${$("#totalSumInvoiceSpan").html()} $
+   
+---------------------------
+   `;
+
+   text+= `
+---------------------------
+
+إستلام مبلغ  :    ${$("#totalSumInvoice").val()} $
    
 ---------------------------
    `;
@@ -527,7 +543,7 @@ reLoad();
 
 
  function geoFindMe(form) {
-//$(".save").prop('disabled', true);
+$(".save").prop('disabled', true);
      geolocation = new Promise((resolve, reject) => {
 navigator.geolocation.watchPosition(
   position => { resolve(position.coords) },

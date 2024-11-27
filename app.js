@@ -3,20 +3,71 @@
 var id="";
 var user="";
 var permission= "";
+var permissionversion=3;
 
 // check data
-
+//$("#reportDeptLink").addClass("hiddenAdmin");
 fetch('navbar.html')
 .then(response => response.text())
 .then(data => {
   document.getElementById('navbar').innerHTML = data;
+  checkPermission();
 })
 .catch(error => console.error('Error loading navbar:', error));
+function checkPermission () {
 
+    permission= JSON.parse(localStorage.getItem("permission"));
+     
+if (permission==null || permission=="" || permission=="{}") {
+    console.log("permission empty ");
+    //console.log("permsiion change ");
+    window.location.href="login.html";
+  /*   permission = {
+         version:1,
+         sell:1,
+         buy:1,
+         reportBuy:0,
+         reportSale:0,
+         dailyReport:0,
+         expense:0,        
+         reportDept:1,
+         out:0
+     }*/
+ 
+ }
+ else {
+    // alert(2);
+     console.log("permissionnotempty ("+permission+")");
+ }
+
+ 
+if (permissionversion!=permission.version){
+    
+    console.log("permsiion change ");
+    console.log(permission);
+    console.log("permsiion version "+permission.version);
+    window.location.href="login.html";
+}
+Object.keys(permission).forEach(key => {
+ 
+   if(permission[key]==0){
+    console.log("#"+key+"Link0");
+   
+    document.getElementById(key+"Link").classList.add("hiddenAdmin");
+   }
+   else {
+    
+    console.log("#"+key+"Link1"+permission.key);
+    $("#"+key+"Link").removeClass("hiddenAdmin");
+   }
+});
+}
 function checkData () {
   
    id= localStorage.getItem("e");
    user= localStorage.getItem("user");
+   
+  
 if (id===null){
     console.log("check data 2 ");
     window.location.href="login.html";

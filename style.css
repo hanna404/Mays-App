@@ -1,3 +1,13 @@
+html {
+  display: table;
+  margin: auto;
+}
+
+body {
+  display: table-cell;
+  vertical-align: middle;
+}
+  
   .body {
     background:#fffbd6;
     margin:50px ;
@@ -200,4 +210,20 @@ font-size: 70px;
 
       .navbar-custom .navbar-nav {
         margin-left: auto; /* This pushes the navbar to the right */
+        float: right;
     }
+
+  .hiddenAdmin {
+    display: none !important;
+  }
+
+ 
+ .navbar-fixed-bottom, .navbar-fixed-top {
+  position: relative;
+
+ }
+ @media (min-width: 768px) {
+  .navbar-nav>li {
+      float: right;
+  }
+}
