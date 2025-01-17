@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   
+<script src="app.js?t=3" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="https://raw.githubusercontent.com/hanna404/Mays-App/refs/heads/main/manifest.json">
+<link rel="stylesheet" href="style.css" />
+</script> 
+<style>
+  #map {
+    height: 100%;
+    width: 1000px;
+  }
+ 
+ #mapContainer {
+    height: 1000px;
+    width: 1000px;
+  }
+  </style>
+  </head>
+  <body dir="rtl" class="body">
+    
+   <div class="loading">
+    <div class="loader"></div>
+</div>
+ 
+ <div id="navbar"></div>
+    <div class="container" style="margin-top: 80px;">
+        <h1 class="header" id="h1Val">المصاريف</h1>
+      <br><br>
+
+      <!-- Your current form and content goes here -->
+
+    </div>
+
+
+
+    <script>
+  
+   
+
+
+var currentLoc;
+if ("geolocation" in navigator) {
+    navigator.geolocation.watchPosition(
+        position => {
+            currentLoc =   {  lat: position.coords.latitude, lng: position.coords.longitude };
+            console.log("Latitude: " + position.coords.latitude);
+            console.log("Longitude: " + position.coords.longitude);
+        },
+        error => {
+            console.error("Geolocation permission denied or error: " + error.message);
+        }
+    );
+} else {
+    console.error("Geolocation is not supported by this browser.");
+}
+
+
+
+
+  $(document).ready(function(){
+  $(".navbar-toggle").click(function() {
+          $("#navbar-collapse").collapse('toggle');
+        });
+       
+  $(".loading").hide();
+   checkData();
+   // Scroll the page to the far right
+   $(window).scrollLeft($(document).width());
+
+  
+
+
+
+
+});
+(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+    ({key: "AIzaSyD4vTxVvziwqU-ymasjeCy_hz9XNUTrmcM", v: "weekly"});
+
+
+// Initialize and add the map
+let map;
+
+async function initMap() {
+  // The location of Uluru
+  const position = currentLoc;
+  console.log("location is "+ currentLoc)
+  // Request needed libraries.
+  //@ts-ignore
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+  // The map, centered at Uluru
+  map = new Map(document.getElementById("map"), {
+    zoom: 2,
+    center: position,
+    mapId: "DEMO_MAP_ID",
+  });
+
+  // The marker, positioned at Uluru
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: position,
+    title: "Uluru",
+  });
+}
+
+;
+
+</script>
+<div id="mapContainer">
+    <div id="map"></div>
+
+</div> 
+ 
+    
+  
+    
+  </body>
+   
+ 
+
+</html>
