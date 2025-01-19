@@ -23,6 +23,21 @@
     height: 1000px;
     width: 1000px;
   }
+
+  button {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+
   </style>
   </head>
   <body dir="rtl" class="body">
@@ -44,16 +59,17 @@
 
     <script>
   
-   
+  
 
 
 var currentLoc;
 if ("geolocation" in navigator) {
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
         position => {
             currentLoc =   {  lat: position.coords.latitude, lng: position.coords.longitude };
             console.log("Latitude: " + position.coords.latitude);
             console.log("Longitude: " + position.coords.longitude);
+            initMap(position.coords.latitude,position.coords.longitude)
         },
         error => {
             console.error("Geolocation permission denied or error: " + error.message);
@@ -89,40 +105,133 @@ if ("geolocation" in navigator) {
 // Initialize and add the map
 let map;
 
-async function initMap() {
+async function initMap(a,b) {
+
   // The location of Uluru
-  const position = currentLoc;
-  console.log("location is "+ currentLoc)
+  const position = {  lat: a, lng: b };
   // Request needed libraries.
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
+  //const { PlacesService } = await google.maps.importLibrary("places");
   // The map, centered at Uluru
   map = new Map(document.getElementById("map"), {
-    zoom: 2,
+    zoom: 17,
     center: position,
     mapId: "DEMO_MAP_ID",
+    mapTypeId: google.maps.MapTypeId.HYBRID
   });
 
   // The marker, positioned at Uluru
+  const greenDot = document.createElement("div");
+    greenDot.style.width = "10px";
+    greenDot.style.height = "10px";
+    greenDot.style.backgroundColor = "green";
+    greenDot.style.borderRadius = "50%";  // Makes it a circle
   const marker = new AdvancedMarkerElement({
     map: map,
     position: position,
-    title: "Uluru",
+    title: "Current Location",
+    content:greenDot, // Custom green dot
+ 
   });
 }
+ 
+function addMarker(lat, lng, title) {
+    const position = { lat, lng };
+    
+    // Create a custom green dot marker
+   
+    
+    // Create the AdvancedMarkerElement with the custom green dot
+    new AdvancedMarkerElement({
+      map: map,
+      position: position,
+      title: title, 
+    });
+  }
+  $(document).ready(function(){
+  let url = 'https://script.google.com/macros/s/AKfycbxaCGtz5m1f9tTb2jvJ81tiGRn2sl-rNbNtcpxNGZqabCUkqbiNBDuGGQtlbKDNW2Zqkw/exec?uniqueval=loc&id='+encodeURIComponent(id);
+fetch(url)
+.then(res => res.json())
+.then(out =>
+ out.data.slice(1).forEach(row => {
+       
+    let title= row[0];
+    let phone = row[1];
+    let lat=row[3]*1;
+    let lng=row[4]*1;
+    console.log(row);
+   
 
-;
+        // Create a marker
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map,
+          title, // Tooltip text
+        });
 
-</script>
+        // Add an info window (optional)
+     
+
+        const infoWindowContent = `
+    <div style="font-family: Arial, sans-serif; font-size: 14px;">
+      <h3 style="margin: 0;">${title}</h3>
+      <p>red: ${cost}</p>
+      <button 
+        style="
+          background-color: #4285F4;
+          color: white;
+          border: none;
+          padding: 8px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+        " 
+        onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}', '_blank')">
+        Get Directions
+      </button> <br>
+
+      <button 
+        style="
+          background-color: green;
+          color: white;
+          border: none;
+          padding: 8px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+        " 
+        onclick="window.open('https://wa.me/${phone}?text=', '_blank')">
+        Whatsapp
+      </button>
+    </div>
+  `;
+
+  // Create the InfoWindow
+  const infoWindow = new google.maps.InfoWindow({
+    content: infoWindowContent,
+  });
+
+  marker.addListener("click", () => {
+    infoWindow.open({
+      anchor: marker,
+      map,
+    });
+  });
+        
+    })
+) //then
+  });
+
+</script> 
 <div id="mapContainer">
     <div id="map"></div>
 
 </div> 
+
+
  
     
-  
+ 
     
   </body>
    

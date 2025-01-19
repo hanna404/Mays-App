@@ -3,7 +3,7 @@
 var id="";
 var user="";
 var permission= "";
-var permissionversion=3;
+var permissionversion=4;
 
 // check data
 //$("#reportDeptLink").addClass("hiddenAdmin");
