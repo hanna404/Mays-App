@@ -173,7 +173,14 @@ $(document).ready(function(){
  // $(".loading").hide();
    checkData();
    // Scroll the page to the far right
-   $(window).scrollLeft($(document).width());
+   window.addEventListener('load', () => {
+            // Scroll to the far right of the page
+            window.scrollTo({
+                top: 0,
+                left: document.documentElement.scrollWidth,
+                behavior: 'smooth'  // This makes the scrolling smooth
+            });
+        });
 
     getSalesSheetJson();
 $('.myradio').click(function(){
@@ -193,6 +200,7 @@ $(this).addClass('myactive');
 });
 // show hide dive
 console.log("test co");
+
 
 
 
@@ -390,7 +398,37 @@ $("#totalSumInvoiceServer").val(totalPrice);
     <br>
      <br>
        <label>رقم التليفون</label>
-   <input type="tel"  name="customerPhone"  id="customerPhone"/>
+   <input type="tel"  name="customerPhone"  id="customerPhone"/>    <button type="button" class="img-button" onclick="openWhatsApp()">
+    <img src="wtsp.png" alt="WhatsApp">
+  </button>
+
+  <button type="button" class="img-button" onclick="openMaps()">
+    <img src="googlemaps.png" alt="googleMaps">
+  </button>
+
+  <script>
+    // Function to open the link
+    function openWhatsApp() {
+      const phoneNumber = $("#customerPhone").val(); // Replace with the desired phone number
+      const message = "Hello!"; // Replace with a pre-filled message (optional)
+      const encodedMessage = encodeURIComponent(message);
+      const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+      // Open the WhatsApp link in a new tab
+      window.open(url, "_blank");
+    }
+
+    function openMaps() {
+      const phoneNumber = $("#customerPhone").val(); // Replace with the desired phone number
+      const message = "Hello!"; // Replace with a pre-filled message (optional)
+      const encodedMessage = encodeURIComponent(message);
+      const url = `window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}', '_blank')`;
+
+      // Open the WhatsApp link in a new tab
+      window.open(url, "_blank");
+    }
+
+  </script>
     </div>
     <br>  <br>
      <div style="width: 180px;"><h1>إضافة عنصر </h1></div> 
