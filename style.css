@@ -227,3 +227,18 @@ font-size: 70px;
       float: right;
   }
 }
+  /* Style the button to remove default appearance */
+  .img-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  /* Add styles to the image */
+  .img-button img {
+    width: 50px; /* Adjust the size as needed */
+    height: 50px;
+  }
+
+  
