@@ -60,6 +60,15 @@ console.log("jsData1");
       console.log("jsData2");
 
       $(".loading").hide();
+
+      const targetElement = document.getElementById('newLocation');
+
+// Scroll the element into view
+targetElement.scrollIntoView({
+    behavior: 'smooth',  // Smooth scrolling
+    block: 'center',     // Align the element to the center vertically
+    inline: 'center'     // Align the element to the center horizontally
+});
  
   }
   
