@@ -280,3 +280,6 @@ font-size: 70px;
     border-radius: 5px;
 }
 
+.item-container {
+  border: green 1px solid;
+}
