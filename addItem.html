@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   
+<script src="app.js?t=3" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="https://raw.githubusercontent.com/hanna404/Mays-App/refs/heads/main/manifest.json">
+<link rel="stylesheet" href="style.css" />
+ 
+<style>
+  .body {
+    background:#e5ffe5;
+  }
+ 
+  </style>
+  </head>
+  <body dir="rtl" class="body">
+    
+   <div class="loading">
+    <div class="loader"></div>
+</div>
+ 
+ <div id="navbar"></div>
+    <div class="container" style="margin-top: 80px;">
+        <h1 class="header" id="h1Val"> إضافة عنصر </h1>
+      <br><br>
+
+      <!-- Your current form and content goes here -->
+ 
+
+
+
+    <script>
+  
+  function get_uniqueValues (){
+
+   
+    
+let url = 'https://script.google.com/macros/s/AKfycbxaCGtz5m1f9tTb2jvJ81tiGRn2sl-rNbNtcpxNGZqabCUkqbiNBDuGGQtlbKDNW2Zqkw/exec?uniqueval=cat&id='+encodeURIComponent(id);
+fetch(url)
+.then(res => res.json())
+.then(out =>
+processUniqueValues(out)
+)
+
+
+.catch(err => console.log(err));
+}
+
+function processUniqueValues (response){ 
+  getCatData(response);
+}
+ 
+
+function getCatData (a) {
+ for (let i=1; i<=a.cat.length; i++){
+  if(a.cat[i])
+  $("#category").append(`<option value="${a.cat[i]}"> ${a.cat[i]} </option>`);
+ }
+}
+    
+
+if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            console.log("Latitude: " + position.coords.latitude);
+            console.log("Longitude: " + position.coords.longitude);
+        },
+        error => {
+            console.error("Geolocation permission denied or error: " + error.message);
+        }
+    );
+} else {
+    console.error("Geolocation is not supported by this browser.");
+}
+
+// handling div buttons
+
+  console.log("test co11");
+  $(document).ready(function(){
+  $(".navbar-toggle").click(function() {
+          $("#navbar-collapse").collapse('toggle');
+        });
+       
+   $(".loading").hide();
+   checkData();  
+   get_uniqueValues();
+   $(".loading").hide();
+
+   const targetElement = document.getElementById('itemName');
+
+// Scroll the element into view
+targetElement.scrollIntoView({
+    behavior: 'smooth',  // Smooth scrolling
+    block: 'center',     // Align the element to the center vertically
+    inline: 'center'     // Align the element to the center horizontally
+});
+
+
+
+});
+
+  console.log("test co22");
+   
+    </script>
+   
+    <form id="uploadForm"  >
+   
+     
+          <div class="inputItem" >
+
+            <table dir="rtl">
+                <tr> 
+                    <td> <label >إسم الغرض  </label> </td>
+                    <td> <input type=text  name="itemName" id="itemName"/></td>
+                   
+                  
+                </tr>
+                <tr> 
+                    <td> <label >سعر المبيع الظاهر      </label> </td>
+                    <td> <input type="number"  step="any" name="visiblePrice" id="visiblePrice"/></td>
+                    
+                </tr>
+                <tr> 
+                    <td> <label >الصنف      </label> </td>
+                    <td>  <select id="category" name="category">
+                        <option value="غير محدد "> غير محدد  </option> 
+                      </select></td>
+                    
+                </tr>
+                <tr> 
+                    <td> <label >صورة       </label> </td>
+                    <td>  <input type="file" id="imageFile" name="image" accept="image/*" capture="environment" required /></td>
+                    
+                </tr> 
+
+              </table>
+                        
+                         
+                               
+                               </div>
+                               <br><br>
+    
+      </div>
+   
+  
+
+
+      
+      <br><br>
+    <button class="save" >   يحفظ   </label> </button>
+       
+      </form>
+    
+  </body>
+  <script>
+
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('imageFile');
+      const file = fileInput.files[0];
+      if (!file) return alert('Please select a file.');
+
+      // Resize the image
+      const resizedImageBlob = await resizeImage(file, 800, 800); // Target size: 800x800px
+
+      
+
+const reader = new FileReader();
+    reader.readAsDataURL(resizedImageBlob);  // Convert file to Base64
+    reader.onload = async () => {
+        const base64String = reader.result.split(",")[1]; // Extract Base64 part
+
+        const payload = JSON.stringify({
+    method:'uploadCat',
+    e:id,
+    itemName:$("#itemName").val(),
+ visiblePrice:$("#visiblePrice").val(),
+ category:$("#category").val(), 
+ imageData:base64String,
+ filename: file.name,
+mimeType: file.type,
+ jsTs:Date.now().toString()
+});
+
+        fetch('https://script.google.com/macros/s/AKfycbxaCGtz5m1f9tTb2jvJ81tiGRn2sl-rNbNtcpxNGZqabCUkqbiNBDuGGQtlbKDNW2Zqkw/exec', {
+            method: "POST",
+            mode:'no-cors',
+            headers: { "Content-Type": "application/json" },
+            body: payload
+        }).then(response => {reLoad()}) 
+        .catch(error => console.error("Upload failed:", error));
+        
+    };
+
+      // Upload the resized image
+      
+        
+    });
+
+   
+
+     
+    
+
+   
+
+function reLoad() {
+  // handle reload
+  window.location.reload();
+}
+
+</script>
+
+
+</html>
