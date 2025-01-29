@@ -720,9 +720,9 @@ targetElement.scrollIntoView({
         <div class="item-container">
             <img src="https://drive.google.com/thumbnail?id=${items[i].imgId}&sz=w1000" alt="Item Image"><br>
             <label>سعر</label>
-            <input type="number" class="imgPrice" value="${items[i].cost}">
+            <input type="number" class="imgPrice" value="${items[i].cost}"  style="width:80px;">
             <label>كمية</label>
-            <input type="number" class="qty" value="">
+            <input type="number" class="qty" value=""  style="width:80px;">
             <input type="hidden" class="avrgCostImg" value="${items[i].averageCost}">
             <div class="addbtnFromImg" onclick="addItemFromImg('${items[i].type}', this)">+</div> <!-- Added 'this' parameter -->
             <button class="closeModal">Close</button>
