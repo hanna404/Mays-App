@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'may-cache-v1';
+const CACHE_NAME = 'may-cache-v2';
 const urlsToCache = [
     '/Mays-App/index.html',
     '/Mays-App/app.js?t=4',
