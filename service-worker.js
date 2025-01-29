@@ -46,22 +46,29 @@ self.addEventListener('activate', event => {
 
 // Cache-then-Network strategy for fetching resources
 self.addEventListener('fetch', event => {
+    const requestUrl = new URL(event.request.url);
+
+    // Allow requests to Google Drive or Googleusercontent to go directly to the network
+    if (requestUrl.origin.includes("googleusercontent.com") || 
+        requestUrl.origin.includes("drive.google.com")) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    // Handle GET requests (cache-then-network strategy)
     if (event.request.method === 'GET') {
         event.respondWith(
-            fetch(event.request).then(networkResponse => {
-                return caches.open(CACHE_NAME).then(cache => {
-                    cache.put(event.request, networkResponse.clone());
-                    return networkResponse; // Return the network response
+            caches.match(event.request).then(cachedResponse => {
+                return cachedResponse || fetch(event.request).then(networkResponse => {
+                    return caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    });
                 });
-            }).catch(() => {
-                // If network request fails, try to serve from the cache
-                return caches.match(event.request).then(cachedResponse => {
-                    return cachedResponse || fetch('/fallback.html'); // Provide a fallback page
-                });
-            })
+            }).catch(() => caches.match('/fallback.html')) // Fallback page
         );
     } else {
-        // For non-GET requests (like POST), just fetch from the network
+        // For non-GET requests (like POST), bypass cache
         event.respondWith(fetch(event.request));
     }
 });

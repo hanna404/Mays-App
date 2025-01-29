@@ -45,23 +45,36 @@
 .then(out =>
   processSalesSheetData(out)
 )
-  
+
+ 
+ 
+
+
+ 
 .catch(err => console.log(err));
 }
-   
-
+function getCatData (a) {
+ for (let i=1; i<=a.length; i++){
+  if(a[i])
+  $("#category").append(`<option value="${a[i].id}"> ${a[i].id} </option>`);
+ }
+}
+ 
     function processSalesSheetData (jsData) {
       checkData();
 processLocationData(jsData.locations);
 processCustomersData(jsData.customers);
 processItemData(jsData.types);
+getCatData(jsData.cat);
+   
+
 console.log("jsData1");
      console.log(jsData)
       console.log("jsData2");
 
       $(".loading").hide();
 
-      const targetElement = document.getElementById('location'); 
+      const targetElement = document.getElementById('location');
 
 // Scroll the element into view
 targetElement.scrollIntoView({
@@ -70,7 +83,7 @@ targetElement.scrollIntoView({
     inline: 'center'     // Align the element to the center horizontally
 });
  
-  }
+}  
   
 
     function processLocationData (jsData){
@@ -439,6 +452,12 @@ $("#totalSumInvoiceServer").val(totalPrice);
   </script>
     </div>
     <br>  <br>
+    <div style="width: 180px;"><h1  >الصنف   </h1></div> 
+    <div class="inputItem" >
+      <select id="category" name="category">
+        <option value="غير محدد "> غير محدد  </option> 
+      </select> <button id="openModal" type="button" >Open Album</button>
+      </div>
      <div style="width: 180px;"><h1>إضافة عنصر </h1></div> 
         <div class="inputItem" >
 
@@ -660,6 +679,34 @@ function reLoad() {
 }
 
 </script>
+  <!-- Popup Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+        <h3>Popup Content</h3>
+        <img src="https://drive.google.com/uc?export=view&id=1tmIhQhf4gDI7dg9et6tuwcCTepzJ4YRj" alt="My Image">
+        <button id="actionButton">Perform Action</button>
+        <button id="closeModal">Close</button>
+    </div>
+</div>
 
+<script>
+    $(document).ready(function() {
+        // Open Modal
+        $("#openModal").click(function() {
+            $("#myModal").fadeIn();
+        });
+
+        // Close Modal
+        $("#closeModal").click(function() {
+            $("#myModal").fadeOut();
+        });
+
+        // Perform action inside the main page
+        $("#actionButton").click(function() {
+            alert("Action performed!");
+            $("#myModal").fadeOut();
+        });
+    });
+</script>
 
 </html>
