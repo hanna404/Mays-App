@@ -244,9 +244,9 @@ font-size: 70px;
   
   .modal {
     display: none;
-    position: fixed;
+    position: absolute;
     z-index: 1000;
-    right: -55%;
+    right: 0;
     top: 0;
     width: 100%;
     height: 100%;
