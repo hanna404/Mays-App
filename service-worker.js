@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'may-cache-v3';
+const CACHE_NAME = 'may-cache-v5';
 const urlsToCache = [
     '/Mays-App/index.html',
     '/Mays-App/app.js?t=4',
@@ -46,29 +46,22 @@ self.addEventListener('activate', event => {
 
 // Cache-then-Network strategy for fetching resources
 self.addEventListener('fetch', event => {
-    const requestUrl = new URL(event.request.url);
-
-    // Allow requests to Google Drive or Googleusercontent to go directly to the network
-    if (requestUrl.origin.includes("googleusercontent.com") || 
-        requestUrl.origin.includes("drive.google.com")) {
-        event.respondWith(fetch(event.request));
-        return;
-    } else {
-          // Handle GET requests (cache-then-network strategy)
-        if (event.request.method === 'GET') {
+    if (event.request.method === 'GET') {
         event.respondWith(
-            caches.match(event.request).then(cachedResponse => {
-                return cachedResponse || fetch(event.request).then(networkResponse => {
-                    return caches.open(CACHE_NAME).then(cache => {
-                        cache.put(event.request, networkResponse.clone());
-                        return networkResponse;
-                    });
+            fetch(event.request).then(networkResponse => {
+                return caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, networkResponse.clone());
+                    return networkResponse; // Return the network response
                 });
-            }).catch(() => caches.match('/fallback.html')) // Fallback page
+            }).catch(() => {
+                // If network request fails, try to serve from the cache
+                return caches.match(event.request).then(cachedResponse => {
+                    return cachedResponse || fetch('/fallback.html'); // Provide a fallback page
+                });
+            })
         );
     } else {
-        // For non-GET requests (like POST), bypass cache
+        // For non-GET requests (like POST), just fetch from the network
         event.respondWith(fetch(event.request));
     }
-}
 });
