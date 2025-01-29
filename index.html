@@ -33,7 +33,7 @@
 
 
  <script>
-  
+  let items;
     //get locations
    function getSalesSheetJson (){
 
@@ -66,6 +66,7 @@ processLocationData(jsData.locations);
 processCustomersData(jsData.customers);
 processItemData(jsData.types);
 getCatData(jsData.cat);
+items=jsData.types;
    
 
 console.log("jsData1");
@@ -260,9 +261,9 @@ function selectCustomerHandler(a) {
   function selectTypeHandler(a) {
   let price= a.find(":selected").attr('price');
   let averageCost= a.find(":selected").attr('avrgcost');
-  //$("#visiblePrice").val(price);
+  $("#visiblePrice").val(price);
   $("#averageCost").val(averageCost);
-  // $("#visiblePrice").attr("placeholder", price);
+   $("#visiblePrice").attr("placeholder", price);
 }
 
 function clearCustomerSelect()
@@ -683,9 +684,8 @@ function reLoad() {
   <div id="myModal" class="modal">
     <div class="modal-content">
         <h3>Popup Content</h3>
-        <img src="https://drive.google.com/thumbnail?id=1tmIhQhf4gDI7dg9et6tuwcCTepzJ4YRj&sz=w1000" alt="My Image">
-        <button id="actionButton">Perform Action</button>
-        <button id="closeModal">Close</button>
+        <div id="modalContent"></div>
+      
     </div>
 </div>
 
@@ -694,19 +694,125 @@ function reLoad() {
         // Open Modal
         $("#openModal").click(function() {
             $("#myModal").fadeIn();
+            const targetElement = document.getElementById('myModal');
+
+// Scroll the element into view
+targetElement.scrollIntoView({
+    behavior: 'smooth',  // Smooth scrolling
+    block: 'center',     // Align the element to the center vertically
+    inline: 'center'     // Align the element to the center horizontally
+});
+            fillModalContent();
         });
 
         // Close Modal
-        $("#closeModal").click(function() {
-            $("#myModal").fadeOut();
-        });
+        $(document).on('click', '.closeModal', function() {
+    $('#myModal').fadeOut();
+});
 
-        // Perform action inside the main page
-        $("#actionButton").click(function() {
-            alert("Action performed!");
-            $("#myModal").fadeOut();
-        });
+         
     });
+
+    function fillModalContent (){ 
+      let template = ``;
+    for (let i = 0; i < items.length; i++) { // Added 'let' for proper scoping
+        template += `
+        <div class="item-container">
+            <img src="https://drive.google.com/thumbnail?id=${items[i].imgId}&sz=w1000" alt="Item Image"><br>
+            <label>سعر</label>
+            <input type="number" class="imgPrice" value="${items[i].cost}">
+            <label>كمية</label>
+            <input type="number" class="qty" value="">
+            <input type="hidden" class="avrgCostImg" value="${items[i].averageCost}">
+            <div class="addbtnFromImg" onclick="addItemFromImg('${items[i].type}', this)">+</div> <!-- Added 'this' parameter -->
+            <button class="closeModal">Close</button>
+        </div>`;
+    }
+    $("#modalContent").html(template);
+}
+/*
+function addItemFromImg(itemName, element) { // Added 'element' parameter
+    // Get the parent container of the clicked button
+    const parentContainer = $(element).closest('.item-container');
+    
+    // Get values from inputs
+    let itemBoxPrice = parentContainer.find('.imgPrice').val();
+    let quantityInBox = parentContainer.find('.qty').val();
+    let averageCost = parentContainer.find('.avrgCostImg').val();
+
+    // Convert Arabic numbers and convert to Number
+    itemBoxPrice = Number(a2e(itemBoxPrice));
+    quantityInBox = Number(a2e(quantityInBox));
+    averageCost = Number(a2e(averageCost));
+
+    const totalItemPrice = quantityInBox * itemBoxPrice;
+
+    // Create table row template
+    const template = `
+    <tr class="itemInTable">
+        <td><label>${itemName}</label></td>
+        <td><label>${itemBoxPrice}</label></td>
+        <td><label>${quantityInBox}</label></td>
+        <td><label>${totalItemPrice}</label></td>
+        <td>
+            <label style="display:none">${averageCost}</label>
+            <div class="removebtn" onclick="removeItem($(this))">x</div>
+        </td>
+    </tr>`;
+
+    // Add to invoice and update
+    $('#invoice tr:last').after(template);
+    updateTotalInvoice();
+}
+*/
+    function addItemFromImg(itemName, clickedElement){
+      var parentContainer = $(clickedElement).closest('.item-container');  // Assuming the button and inputs are inside a div
+
+// Get the values of the inputs within this parent container
+let itemBoxPrice = parentContainer.find('.imgPrice').val();
+let quantityInBox = parentContainer.find('.qty').val();
+let averageCost = parentContainer.find('.avrgCostImg').val();
+
+// Log or process the values
+console.log('Price:', itemBoxPrice);
+console.log('Quantity:', quantityInBox);
+console.log('Average Cost:', averageCost);
+// convertt what needs conversion for arabic JS numbers
+
+  itemBoxPrice=a2e(itemBoxPrice);
+  quantityInBox=a2e(quantityInBox);
+
+/// end of conversion 
+
+// convert strings to numbers
+
+  itemBoxPrice=Number(itemBoxPrice);
+  averageCost=Number(averageCost);
+  quantityInBox=Number(quantityInBox);
+
+// end convert string to numbers
+let totalItemPrice =  quantityInBox*itemBoxPrice;
+
+ 
+
+let totalItemAverageCost =  quantityInBox*averageCost;
+
+
+  let template = `      <tr class="itemInTable">
+                <td><label style="  width: auto;" >${itemName}</label ></td>
+                <td><label style="  width: auto;">${itemBoxPrice}</label ></td>
+                <td><label style="  width: auto;">${quantityInBox}</label ></td>
+                <td><label style="  width: auto;">${totalItemPrice}</label ></td>
+                <td> <label style=" display:none">${averageCost}</label>  <div class="removebtn" onclick="removeItem($(this))">x</div> </td>
+
+                </tr>` ;
+              //  alert(template);
+
+    $('#invoice tr:last').after(template);    
+    clearItemSelect();
+    updateTotalInvoice();     
+
+}
 </script>
 
 </html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touch-Friendly Menu</title> 
+    <style>
+        /* styles.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.menu-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+}
+
+.menu-item {
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    height: 150px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+
+.menu-item:hover {
+    background-color: #0056b3;
+}
+
+.menu-item:active {
+    background-color: #003366;
+}
+
+    </style>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   
+<script src="app.js?t=3" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="https://raw.githubusercontent.com/hanna404/Mays-App/refs/heads/main/manifest.json">
+<link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+    <div class="menu-container">
+        <div class="menu-item" onclick="openItem('Item 1')">POS</div>
+        <div class="menu-item" onclick="openItem('Item 2')">Add Items</div>
+        <div class="menu-item" onclick="openItem('Item 3')">Item 3</div>
+        <div class="menu-item" onclick="openItem('Item 4')">Item 4</div>
+        <div class="menu-item" onclick="openItem('Item 5')">Item 5</div>
+        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
+        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
+        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
+        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
+        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
+    </div>
+     <script>
+        $(document).ready(function(){
+            
+        checkData();
+        checkPermission();
+        });
+        
+        function openItem(itemName) {
+    alert("Opening " + itemName);
+    // You can replace this with more functionality like navigating to another page or opening a modal
+}
+     </script>
+</body>
+</html>
+
