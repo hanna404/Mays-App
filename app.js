@@ -3,7 +3,7 @@
 var id="";
 var user="";
 var permission= "";
-var permissionversion=4;
+var permissionversion=5;
 
 // check data
 //$("#reportDeptLink").addClass("hiddenAdmin");
@@ -49,7 +49,7 @@ if (permissionversion!=permission.version){
     window.location.href="login.html";
 }
 Object.keys(permission).forEach(key => {
- 
+ try {
    if(permission[key]==0){
     console.log("#"+key+"Link0");
    
@@ -60,6 +60,10 @@ Object.keys(permission).forEach(key => {
     console.log("#"+key+"Link1"+permission.key);
     $("#"+key+"Link").removeClass("hiddenAdmin");
    }
+}
+catch (e){
+    
+}
 });
 }
 function checkData () {
@@ -257,3 +261,47 @@ self.addEventListener('fetch', event => {
         event.respondWith(fetch(event.request));
     }
 });
+
+function resizeImage(file, maxWidth, maxHeight) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+  
+          // Original dimensions
+          const originalWidth = img.width;
+          const originalHeight = img.height;
+  
+          // Aspect ratio
+          const aspectRatio = originalWidth / originalHeight;
+  
+          // New dimensions with aspect ratio preserved
+          let newWidth = originalWidth;
+          let newHeight = originalHeight;
+  
+          if (newWidth > maxWidth || newHeight > maxHeight) {
+            if (newWidth > newHeight) {
+              newWidth = maxWidth;
+              newHeight = newWidth / aspectRatio;
+            } else {
+              newHeight = maxHeight;
+              newWidth = newHeight * aspectRatio;
+            }
+          }
+  
+          // Set canvas size and draw resized image
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+  
+          // Convert the canvas to a blob
+          canvas.toBlob((blob) => resolve(blob), file.type, 0.8); // Adjust quality (0.8) as needed
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
