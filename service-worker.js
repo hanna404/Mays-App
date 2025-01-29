@@ -53,10 +53,9 @@ self.addEventListener('fetch', event => {
         requestUrl.origin.includes("drive.google.com")) {
         event.respondWith(fetch(event.request));
         return;
-    }
-
-    // Handle GET requests (cache-then-network strategy)
-    if (event.request.method === 'GET') {
+    } else {
+          // Handle GET requests (cache-then-network strategy)
+        if (event.request.method === 'GET') {
         event.respondWith(
             caches.match(event.request).then(cachedResponse => {
                 return cachedResponse || fetch(event.request).then(networkResponse => {
@@ -71,4 +70,5 @@ self.addEventListener('fetch', event => {
         // For non-GET requests (like POST), bypass cache
         event.respondWith(fetch(event.request));
     }
+}
 });
