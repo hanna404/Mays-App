@@ -850,7 +850,7 @@ function loadImage(url) {
       });
     }
 
-    // Function to generate the PDF
+    // Function to generate the PDFss
     async function generatePDF() {
       // Create a new jsPDF instance
       const { jsPDF } = window.jspdf;
@@ -858,8 +858,8 @@ function loadImage(url) {
         orientation: 'portrait',
         unit: 'pt',
         format: 'a4'
-      });
-       
+      }); 
+        
       // Starting vertical position
       let y = 20;
       const marginLeft = 20;
