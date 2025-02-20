@@ -3,7 +3,12 @@
 var id="";
 var user="";
 var permission= "";
-var permissionversion=8;
+var params={
+    "adminPhone":"",
+    "startMsgAR":"",
+    "endMsgAR":""
+};
+var permissionversion=9;
 
 // check data
 //$("#reportDeptLink").addClass("hiddenAdmin");
@@ -17,6 +22,7 @@ fetch('navbar.html')
 function checkPermission () {
 
     permission= JSON.parse(localStorage.getItem("permission"));
+    params= JSON.parse(localStorage.getItem("params"));
      
 if (permission==null || permission=="" || permission=="{}") {
     console.log("permission empty ");

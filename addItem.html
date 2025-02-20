@@ -136,7 +136,7 @@ targetElement.scrollIntoView({
                 </tr>
                 <tr> 
                     <td> <label >صورة       </label> </td>
-                    <td>  <input type="file" id="imageFile" name="image" accept="image/*" capture="environment" required /></td>
+                    <td>  <input type="file" id="imageFile" name="image" accept="image/*" capture="environment" required /> <button id="toggleCamera">Toggle Camera Mode</button> </td>
                     
                 </tr> 
 
@@ -160,6 +160,24 @@ targetElement.scrollIntoView({
     
   </body>
   <script>
+
+$('#toggleCamera').click(function() {
+  event.preventDefault(); // Prevents the form from submitting
+    const $input = $('#imageFile');
+    
+    if($input.attr('capture')) {
+        // Remove camera mode (default file selection)
+        $input.removeAttr('capture');
+        $(this).text('Enable Rear Camera');
+    } else {
+        // Add rear camera mode
+        $input.attr('capture', 'environment');
+        $(this).text('Enable File Selection');
+    }
+    
+    // Clear current input value
+    $input.val('');
+});
 
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
       e.preventDefault();
