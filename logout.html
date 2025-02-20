@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Logging Out...</title>
+    <script>
+        // Clear all client-side storage and redirect
+        function performLogout() {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Clear sessionStorage
+            sessionStorage.clear();
+            
+            // Clear cookies
+            document.cookie.split(';').forEach(cookie => {
+                const [name] = cookie.split('=');
+                document.cookie = `${name.trim()}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            });
+
+            // Force redirect to login page with cache-busting parameter
+            window.location.replace('login.html?nocache=' + Date.now());
+        }
+    </script>
+</head>
+<body onload="performLogout()">
+    <h1>Logging out...</h1>
+    <p>Please wait while we securely clear your session.</p>
+</body>
+</html>

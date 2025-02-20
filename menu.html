@@ -68,16 +68,17 @@ body {
 </head>
 <body>
     <div class="menu-container">
-        <div class="menu-item" onclick="openItem('Item 1')">POS</div>
-        <div class="menu-item" onclick="openItem('Item 2')">Add Items</div>
-        <div class="menu-item" onclick="openItem('Item 3')">Item 3</div>
-        <div class="menu-item" onclick="openItem('Item 4')">Item 4</div>
-        <div class="menu-item" onclick="openItem('Item 5')">Item 5</div>
-        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
-        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
-        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
-        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
-        <div class="menu-item" onclick="openItem('Item 6')">Item 6</div>
+        <div class="menu-item" onclick="openItem('index.html')">POS</div>
+        <div class="menu-item" onclick="openItem('addItem.html')">Add Items</div>
+        <div class="menu-item">Expenses</div>
+        <div class="menu-item">Client Info</div>
+        <div class="menu-item" >Debt Management</div>
+        <div class="menu-item" >Salaries</div>
+        <div class="menu-item" >Profit</div>
+        <div class="menu-item" >Stock</div>
+        <div class="menu-item" >Map Loation</div>
+        <div class="menu-item" >Invoices</div>
+        <div class="menu-item" onclick="openItem('logout.html')">Logout</div>
     </div>
      <script>
         $(document).ready(function(){
@@ -87,7 +88,7 @@ body {
         });
         
         function openItem(itemName) {
-    alert("Opening " + itemName);
+    window.location=itemName;
     // You can replace this with more functionality like navigating to another page or opening a modal
 }
      </script>
