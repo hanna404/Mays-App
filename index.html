@@ -870,7 +870,9 @@ function loadImage(url) {
       // Loop through each item and add its content to the PDF
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
+        let imgData = null;
         try {
+          try {
           // Load the image for the item
           const img = await loadImage(`https://drive.google.com/thumbnail?id=${items[i].imgId}&sz=w1000`);
           
@@ -880,11 +882,17 @@ function loadImage(url) {
           canvas.height = img.height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0);
-          const imgData = canvas.toDataURL('image/png');
-          
-          // Add the image to the PDF
+           imgData = canvas.toDataURL('image/png');
+        } catch (error) {
+          // Log the error and continue; you can also set a fallback image data URL here
+          console.error(`Error loading image for item "${item.type}":`, error);
+        }
+        if (imgData) {
           pdf.addImage(imgData, 'PNG', marginLeft, y, imageWidth, imageHeight);
-          
+        } else {
+          pdf.setFontSize(10);
+          pdf.text('Image not available', marginLeft, y + (imageHeight / 2));
+        }
           // Add item text (name and price)
           pdf.setFontSize(12);
           pdf.text(`Name: ${item.type}`, textX, y + 15);
