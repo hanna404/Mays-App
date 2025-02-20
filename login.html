@@ -99,8 +99,18 @@
         if (a['status']== "success"){
         localStorage.setItem('user', a['username']);
         localStorage.setItem('e', a['e']);
-        localStorage.setItem('permission', a['permission'].replace(/\n/g, '').replace(/\r/g, '').replace(/\s/g, '').trim());
-        window.location='index.html';}
+        let permissionTemp = JSON.parse(a['permission'].replace(/\n/g, '').replace(/\r/g, '').replace(/\s/g, '').trim());
+        localStorage.setItem('permission',a['permission'].replace(/\n/g, '').replace(/\r/g, '').replace(/\s/g, '').trim()) ;
+        localStorage.setItem('params',a['params'].replace(/\n/g, '').replace(/\r/g, '').replace(/\s/g, '').trim()) ;
+        if(permissionTemp["POS"]==0){
+          window.location='index.html';
+       
+        }
+        else {
+          window.location='menu.html';
+           
+        }
+       }
         else {
         window.location='login.html';
         }
