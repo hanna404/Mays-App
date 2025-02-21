@@ -11,9 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="https://raw.githubusercontent.com/hanna404/Mays-App/refs/heads/main/manifest.json">
 <link rel="stylesheet" href="style.css?t=44" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+ 
 <meta charset="UTF-8">
 
  
@@ -191,9 +189,7 @@ if ("geolocation" in navigator) {
 
 console.log("test co11");
 $(document).ready(function(){
-
-  document.getElementById('generatePDF').addEventListener('click', generatePDF);
-
+ 
   $(".navbar-toggle").click(function() {
           $("#navbar-collapse").collapse('toggle');
         });
@@ -708,8 +704,7 @@ function reLoad() {
     <div class="modal-content">
         <h3>ألبوم الصور </h3>
         <div id="modalContent"></div>
-        <button type="button" class="img-button" id="generatePDF"> Generate PDF</button>
-    </div>
+        </div>
     
 </div>
 
@@ -839,81 +834,8 @@ let totalItemAverageCost =  quantityInBox*averageCost;
 
 }
 
-function loadImage(url) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        // Set crossOrigin to allow loading images from different domains
-        img.crossOrigin = "anonymous";
-        img.src = url;
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
-      });
-    }
-
-    // Function to generate the PDFss
-    async function generatePDF() {
-      // Create a new jsPDF instance
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'pt',
-        format: 'a4'
-      }); 
-        
-      // Starting vertical position
-      let y = 20;
-      const marginLeft = 20;
-      const imageWidth = 50;
-      const imageHeight = 50;
-      const textX = marginLeft + imageWidth + 10;
-
-      // Loop through each item and add its content to the PDF
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        let imgData = null;
-        try {
-          try {
-          // Load the image for the item
-          const img = await loadImage(`https://drive.google.com/thumbnail?id=${items[i].imgId}&sz=w1000`);
-          
-          // Create a temporary canvas to convert the image to base64 data
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-           imgData = canvas.toDataURL('image/png');
-        } catch (error) {
-          // Log the error and continue; you can also set a fallback image data URL here
-          console.error(`Error loading image for item "${item.type}":`, error);
-        }
-        if (imgData) {
-          pdf.addImage(imgData, 'PNG', marginLeft, y, imageWidth, imageHeight);
-        } else {
-          pdf.setFontSize(10);
-          pdf.text('Image not available', marginLeft, y + (imageHeight / 2));
-        }
-          // Add item text (name and price)
-          pdf.setFontSize(12);
-          pdf.text(`Name: ${item.type}`, textX, y + 15);
-          pdf.text(`Price: ${item.cost}`, textX, y + 30);
-          
-          // Increment y position for the next item
-          y += imageHeight + 20;
-          
-          // If y exceeds the page height, add a new page and reset y position
-          if (y > pdf.internal.pageSize.getHeight() - 40) {
-            pdf.addPage();
-            y = 20;
-          }
-        } catch (error) {
-          console.error('Error loading image:', error);
-        }
-      }
-      
-      // Save the PDF
-      pdf.save('items.pdf');
-    }
+ 
+    
 
 </script>
 
