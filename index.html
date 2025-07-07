@@ -111,7 +111,7 @@ function getCustomerSelectOptions(arrayOfLocations){
       let html=`<option  style="display:none"  disabled selected  value="" > </option>`;
 
       for (i=0; i<arrayOfLocations.length;i++){
-        let optionVal= `<option phone="${arrayOfLocations[i].phone}" location="${arrayOfLocations[i].location}" value="${arrayOfLocations[i].name}" >${arrayOfLocations[i].name}</option>`;
+        let optionVal= `<option fp="${arrayOfLocations[i].fp}"  phone="${arrayOfLocations[i].phone}" location="${arrayOfLocations[i].location}" value="${arrayOfLocations[i].name}" >${arrayOfLocations[i].name}</option>`;
         html+=optionVal;
       }
 
@@ -273,14 +273,21 @@ function selectCustomerHandler(a) {
   $("#customerPhone").val(a.find(":selected").attr('phone'));
        $("#customerName").prop('disabled', true);
    $("#customerPhone").prop('disabled', true);
+   let fixedProfit = 6 ;
+  if(oldCustomerBool){
+    fixedProfit=a.find(":selected").attr('fp');
+  }
 }
 
   function selectTypeHandler(a) {
-  let price= a.find(":selected").attr('price');
+    //let price= a.find(":selected").attr('price');
+    // adding the fixed price logic
+ let price= a.find(":selected").attr('averageCost')*1+fixedProfit;
   let averageCost= a.find(":selected").attr('avrgcost');
   $("#visiblePrice").val(price);
   $("#averageCost").val(averageCost);
    $("#visiblePrice").attr("placeholder", price);
+
 }
 
 function clearCustomerSelect()
@@ -665,7 +672,8 @@ bankLira:a2e(form.totalSumInvoiceLira.value),
  totalHiddenBankAccount:form.totalSumInvoiceServer.value,
  vanNumber:user,
  oldCustomer:oldCustomerBool,
- jsTs:Date.now().toString()
+ jsTs:Date.now().toString(),
+ 'fixedProfit':fixedProfit
 
 }
 
