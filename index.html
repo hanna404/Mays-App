@@ -276,15 +276,15 @@ function selectCustomerHandler(a) {
    $("#customerPhone").prop('disabled', true);
    fixedProfit = 6 ;
   if(oldCustomerBool){
-    fixedProfit=a.find(":selected").attr('fp');
+    fixedProfit=a.find(":selected").attr('fp')*1;
   }
 }
 
   function selectTypeHandler(a) {
     //let price= a.find(":selected").attr('price');
     // adding the fixed price logic
- let price= a.find(":selected").attr('averageCost')*1+fixedProfit;
-  let averageCost= a.find(":selected").attr('avrgcost');
+  let averageCost= a.find(":selected").attr('avrgcost');  
+ let price= averageCost*1+fixedProfit; 
   $("#visiblePrice").val(price);
   $("#averageCost").val(averageCost);
    $("#visiblePrice").attr("placeholder", price);
