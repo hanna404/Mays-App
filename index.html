@@ -264,6 +264,7 @@ function changeCatHandler(a) {
    
 }
 let oldCustomerBool=false;
+let fixedProfit = 6 ;
 function selectCustomerHandler(a) {
   //$("#location").val($("#location option:first").val());
   $("#newLocation").prop('disabled', true);
@@ -273,7 +274,7 @@ function selectCustomerHandler(a) {
   $("#customerPhone").val(a.find(":selected").attr('phone'));
        $("#customerName").prop('disabled', true);
    $("#customerPhone").prop('disabled', true);
-   let fixedProfit = 6 ;
+   fixedProfit = 6 ;
   if(oldCustomerBool){
     fixedProfit=a.find(":selected").attr('fp');
   }
