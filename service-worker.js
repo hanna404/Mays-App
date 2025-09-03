@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'may-cache-v8';
+const CACHE_NAME = 'may-cache-v9';
 const urlsToCache = [
     '/Mays-App/index.html',
     '/Mays-App/app.js?t=4',
@@ -83,4 +83,5 @@ self.addEventListener('fetch', event => {
         );
     }
 });
+
 
