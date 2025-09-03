@@ -61,7 +61,26 @@ self.addEventListener('fetch', event => {
             })
         );
     } else {
-        // For non-GET requests (like POST), just fetch from the network
+    /*  old version  // For non-GET requests (like POST), just fetch from the network
         event.respondWith(fetch(event.request));
+        */
+        
+     // Handle POST/PUT/DELETE safely
+        event.respondWith(
+            (async () => {
+                try {
+                    const reqClone = event.request.clone(); // clone body
+                    const response = await fetch(reqClone);
+                    return response; // return server response directly
+                } catch (err) {
+                    // If offline, you might want to queue it for background sync instead
+                    return new Response(
+                        JSON.stringify({ ok: false, error: 'Network error' }),
+                        { headers: { 'Content-Type': 'application/json' }, status: 503 }
+                    );
+                }
+            })()
+        );
     }
 });
+
