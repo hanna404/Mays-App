@@ -8,7 +8,7 @@ var params={
     "startMsgAR":"",
     "endMsgAR":""
 };
-var permissionversion=9;
+var permissionversion=10;
 
 // check data
 //$("#reportDeptLink").addClass("hiddenAdmin");
@@ -310,4 +310,5 @@ function resizeImage(file, maxWidth, maxHeight) {
       };
       reader.readAsDataURL(file);
     });
+
   }
