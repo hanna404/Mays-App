@@ -111,7 +111,7 @@ function getCustomerSelectOptions(arrayOfLocations){
       let html=`<option  style="display:none"  disabled selected  value="" > </option>`;
 
       for (i=0; i<arrayOfLocations.length;i++){
-        let optionVal= `<option fp="${arrayOfLocations[i].fp}"  phone="${arrayOfLocations[i].phone}" location="${arrayOfLocations[i].location}" value="${arrayOfLocations[i].name}" >${arrayOfLocations[i].name}</option>`;
+        let optionVal= `<option fpw="${arrayOfLocations[i].fpw}" fpr="${arrayOfLocations[i].fpr}" fpb="${arrayOfLocations[i].fpb}"  phone="${arrayOfLocations[i].phone}" location="${arrayOfLocations[i].location}" value="${arrayOfLocations[i].name}" >${arrayOfLocations[i].name}</option>`;
         html+=optionVal;
       }
 
@@ -264,7 +264,10 @@ function changeCatHandler(a) {
    
 }
 let oldCustomerBool=false;
-let fixedProfit = 6 ;
+ 
+   let fpw = 6 ;
+   let fpr = 6 ;
+   let fpb = 6 ;
 function selectCustomerHandler(a) {
   //$("#location").val($("#location option:first").val());
   $("#newLocation").prop('disabled', true);
@@ -274,17 +277,30 @@ function selectCustomerHandler(a) {
   $("#customerPhone").val(a.find(":selected").attr('phone'));
        $("#customerName").prop('disabled', true);
    $("#customerPhone").prop('disabled', true);
-   fixedProfit = 6 ;
+    
   if(oldCustomerBool){
-    fixedProfit=a.find(":selected").attr('fp')*1;
+    fixedProfitw=a.find(":selected").attr('fpw')*1;
+    fixedProfitr=a.find(":selected").attr('fpr')*1;
+    fixedProfitb=a.find(":selected").attr('fpb')*1;
   }
 }
 
   function selectTypeHandler(a) {
     //let price= a.find(":selected").attr('price');
-    // adding the fixed price logic
+    // Changing fixed profit logic, to profit based on color type based on customer
   let averageCost= a.find(":selected").attr('avrgcost');  
- let price= averageCost*1+fixedProfit; 
+    let type= a.find(":selected").attr('value');
+    let price= averageCost*1;
+    if(type=="whiteb) {
+price=averageCost*1+fixedProfitw;
+       }
+   else if(type=="redb) {
+price=averageCost*1+fixedProfitr;
+       }
+  else if(type=="baladi) {
+price=averageCost*1+fixedProfitb;
+       }
+ 
   $("#visiblePrice").val(price);
   $("#averageCost").val(averageCost);
    //$("#visiblePrice").attr("placeholder", price);
@@ -673,8 +689,7 @@ bankLira:a2e(form.totalSumInvoiceLira.value),
  totalHiddenBankAccount:form.totalSumInvoiceServer.value,
  vanNumber:user,
  oldCustomer:oldCustomerBool,
- jsTs:Date.now().toString(),
- 'fixedProfit':fixedProfit
+ jsTs:Date.now().toString()
 
 }
 
